@@ -9,7 +9,7 @@ const server = express();
 // Using Middlewares
 server.use(cors());
 server.use(bodyParser.json());
-dotenv.config({ path: "./config.env" });
+dotenv.config({ path: "../config.env" });
 
 const DB = process.env.DATABASE;
 const PORT = process.env.PORT;
