@@ -1,0 +1,26 @@
+.orders-ordered-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  padding: 30px 100px;
+  grid-gap: 50px;
+}
+.orders-ordered h1 {
+  font-size: 1.8rem;
+  margin: 10px 0 20px 0;
+  text-align: center;
+}
+.customer-details h4 {
+  display: inline-block;
+  font-size: 1.1rem;
+}
+.customer-details span {
+  display: inline-block;
+  font-size: 1rem;
+  margin: 0 10px;
+}
+@media only screen and (max-width: 800px) {
+  .orders-ordered-row {
+    grid-template-columns: repeat(1, 1fr);
+    padding: 20px 50px;
+  }
+}

@@ -1,0 +1,134 @@
+.small-container {
+  max-width: 1080px;
+  margin: auto;
+  padding-left: 25px;
+  padding-right: 25px;
+}
+.cart-page {
+  height: auto;
+  margin-bottom: 100px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.cart-info {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+th {
+  text-align: left;
+  padding: 5px;
+  color: #fff;
+  background-color: #173334;
+  font-weight: normal;
+}
+
+td {
+  padding: 10px 5px;
+}
+
+td input {
+  width: 40px;
+  height: 30px;
+  padding: 5px;
+}
+
+td img {
+  width: 80px;
+  height: 80px;
+  margin-right: 10px;
+}
+
+.total-price {
+  display: flex;
+  justify-content: flex-end;
+}
+.total-price table {
+  border-top: 3px solid #173334;
+  width: 100%;
+  max-width: 400px;
+}
+
+th:last-child,
+td:last-child {
+  text-align: right;
+}
+
+.cart-remove-btn {
+  background-color: #febd2f;
+  color: #173334;
+  padding: 2px 3px;
+  font-size: 0.7rem;
+  border-radius: 2px;
+}
+.cart-remove-btn:hover {
+  color: #d4caca;
+  background-color: #173334;
+}
+
+.place-order-btn {
+  background-color: #eeb02a;
+  color: #173334;
+  margin-top: 20px;
+  width: calc(100% - 10px);
+  max-width: 400px;
+  margin-left: auto;
+  height: 50px;
+  font-size: 18px;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  display: block;
+}
+.place-order-btn:hover {
+  background-color: #2b4e4f;
+  color: #e7e2e2;
+}
+
+@media only screen and (max-width: 796px) {
+  .cart-page {
+    padding: 0;
+  }
+  th {
+    font-size: 0.8rem;
+  }
+  td {
+    padding: 15px 0px;
+  }
+  td img {
+    width: 60px;
+    height: 60px;
+  }
+  .cart-info {
+    display: inline;
+  }
+  td p {
+    font-size: 0.7rem;
+    font-weight: 500;
+    margin-bottom: -3px;
+  }
+  td small {
+    font-size: 0.7rem;
+  }
+  .cart-subtotal {
+    font-size: 0.8rem;
+  }
+
+  .total-price {
+    margin-top: 15px;
+    font-size: 0.9rem;
+    line-height: 2px;
+  }
+
+  .place-order-btn {
+    height: 35px;
+    width: 100%;
+    font-size: 1rem;
+    margin-bottom: 100px;
+  }
+}

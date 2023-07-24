@@ -1,0 +1,134 @@
+.small-container {
+  padding-left: 25px;
+  padding-right: 25px;
+  min-height: 61vh;
+}
+#row {
+  display: flex;
+  flex-wrap: wrap;
+}
+#ProductImg {
+  width: 450px;
+  height: 450px;
+  object-fit: contain;
+}
+#col-2 {
+  width: 50%;
+}
+.small-img-row {
+  display: flex;
+  justify-content: space-between;
+  width: 90%; /* decrease width by 10% */
+  margin: auto; /* center horizontally */
+}
+.small-img-col {
+  flex-basis: 24%;
+  cursor: pointer;
+  height: 90%; /* decrease height by 10% */
+}
+#col-2 {
+  padding: 20px;
+}
+.navigator {
+  color: #555;
+  font-size: 0.9rem;
+}
+.h1 {
+  margin: 5px 0;
+  font-size: 1.8rem;
+  line-height: 1.4;
+}
+.h4 {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 7px 10px 0 0;
+  color: #555;
+  display: inline-block;
+}
+.h6 {
+  font-size: 0.9rem;
+  text-decoration: 0.1rem solid line-through;
+  color: #868585;
+  display: inline-block;
+}
+select {
+  margin: 15px 0;
+  padding: 4px 10px;
+  border: 1px solid #9c918f;
+}
+input {
+  width: 40px;
+  height: 26px;
+  padding-left: 5px;
+  font-size: 15px;
+  border: 1px solid #9c918f;
+  border-radius: 5px;
+  margin-left: 10px;
+}
+input:focus {
+  outline: none;
+}
+h3 {
+  font-size: 1.1rem;
+}
+.icon {
+  color: #ff523b;
+  margin-left: 10px !important;
+}
+.description {
+  font-size: 0.9rem;
+}
+.AddToCart {
+  height: 40px;
+  width: 150px;
+  margin-top: 24px;
+}
+.AddToCart:hover {
+  color: #febd2f;
+  background-color: #173334;
+}
+@media screen and (max-width: 796px) {
+  .small-container {
+    margin-top: 30px;
+    margin-bottom: -50px;
+  }
+  .col-2 {
+    flex-basis: 100%;
+  }
+  .row {
+    text-align: left;
+  }
+  #ProductImg {
+    width: 300px;
+    height: 300px;
+    display: block;
+    margin: 0 auto;
+  }
+  p {
+    font-size: 0.8rem;
+  }
+  h1 {
+    font-size: 24px;
+    color: #000;
+  }
+  h4 {
+    font-size: 1.2rem;
+    display: inline-block;
+    color: #555;
+  }
+  h6 {
+    color: #868585;
+    font-size: 4rem;
+    display: inline-block;
+  }
+  h3 {
+    margin-top: 20px;
+  }
+  .description {
+    font-size: 0.9rem;
+  }
+  .AddToCart {
+    height: 30px;
+    width: 120px;
+  }
+}
