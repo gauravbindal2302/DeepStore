@@ -228,60 +228,58 @@ server.post("/contact", async (req, res) => {
   }
 });
 
-// Create a schema for the login form
+// Create a schema for the admin
 const adminSchema = new mongoose.Schema({
   username: String,
+  email: String,
   password: String,
 });
 const Admin = mongoose.model("Admin", adminSchema);
 
 server.post("/login", (req, res) => {
-  const { username, password } = req.body;
-  Admin.findOne({ username: username })
+  const { email, password } = req.body; // Use the correct field names for email and password
+  Admin.findOne({ email: email, password: password }) // Use the correct field names for email and password
     .then((admin) => {
       if (admin) {
-        if (password === admin.password) {
-          res.send({ message: "Login Successful", admin: admin });
-        } else {
-          res.send({ message: "Password didn't match" });
-        }
+        res.send({ message: "Login Successful", admin: admin });
       } else {
-        res.send({ message: "Admin not Registered" });
+        res.send({ message: "Invalid email or password" });
       }
     })
     .catch((err) => {
-      console.error("Error occurred while searching for admin:", err);
+      console.log(err);
+      console.error("Error occurred while searching for admin");
       res.sendStatus(500);
     });
 });
 
-// Create a schema for the register form
-const users = [];
-
 server.post("/register", (req, res) => {
-  const { username, email, password } = req.body;
-
-  // Validate input
-  if (!username || !email || !password) {
-    return res.status(400).json({ message: "Invalid input" });
-  }
-
-  // Check if the username or email is already registered
-  if (
-    users.some((user) => user.username === username || user.email === email)
-  ) {
-    return res
-      .status(400)
-      .json({ message: "Username or email already exists" });
-  }
-
-  // Create a new user object
-  const newUser = { username, email, password };
-
-  // Save the new user
-  users.push(newUser);
-
-  return res.status(200).json({ message: "You are registered successfully!" });
+  const { username, email, password } = req.body; // Extract the fields from the request body
+  Admin.findOne({ email: email })
+    .then((user) => {
+      if (user) {
+        res.send({ message: "Admin already registered" });
+      } else {
+        const admin = new Admin({
+          username,
+          email, // Save the email field in the new Admin document
+          password,
+        });
+        admin
+          .save()
+          .then(() => {
+            res.send({ message: "Successfully Registered, Please Login Now" });
+          })
+          .catch((err) => {
+            console.log(err);
+            res.send({ message: "Error occurred while saving admin" });
+          });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.send({ message: "Error occurred while searching for admin" });
+    });
 });
 
 // Listening to the server at port

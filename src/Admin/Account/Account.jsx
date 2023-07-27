@@ -22,27 +22,43 @@ export default function Account() {
 
   const login = async (event) => {
     setLoginVisible(true);
-    // Set the position to 0 when login button is clicked
-    axios.post("http://localhost:5000/login", admin).then((res) => {
-      alert(res.data.message);
-      resetForm();
-      navigate("/admin/dashboard");
-    });
+    if (admin.email && admin.password) {
+      try {
+        const response = await axios.post("http://localhost:5000/login", {
+          email: admin.email,
+          password: admin.password,
+        });
+        if (response.data.message === "Login Successful") {
+          alert("Login Successful");
+          resetForm();
+          navigate("/admin/dashboard");
+        } else {
+          alert("Invalid email or password");
+        }
+      } catch (error) {
+        console.error("Error while logging in:", error);
+      }
+    } else {
+      alert("Please provide all fields");
+    }
   };
 
   const register = async () => {
     setLoginVisible(false);
-    // Set the position to 100 when register button is clicked
     if (admin.username && admin.email && admin.password) {
       try {
         const response = await axios.post(
           "http://localhost:5000/register",
           admin
         );
-        if (response.status === 200) {
-          alert("You are registered successfully!");
+        if (response.data.message === "Admin already registered") {
+          alert("Admin already registered. Please log in.");
+        } else if (
+          response.data.message === "Successfully Registered, Please Login Now"
+        ) {
+          alert("Registration successful. Please log in.");
           resetForm();
-          navigate("/admin/dashboard");
+          setLoginVisible(true);
         } else {
           console.log("Failed to register!");
         }
@@ -50,7 +66,7 @@ export default function Account() {
         console.error("Error while registering new admin:", error);
       }
     } else {
-      alert("Invalid input");
+      alert("Please provide all fields");
     }
   };
 
@@ -62,9 +78,7 @@ export default function Account() {
     });
   }
 
-  function logout() {
-    resetForm(); // Clear the form fields
-  }
+  /*function logout() {resetForm();}*/
 
   return (
     <>
@@ -104,10 +118,10 @@ export default function Account() {
                 {isLoginVisible ? (
                   <form>
                     <input
-                      type="username"
-                      name="username"
-                      placeholder="Username"
-                      value={admin.username}
+                      type="email"
+                      name="email"
+                      placeholder="Email"
+                      value={admin.email}
                       onChange={handleChange}
                     />
                     <input
@@ -125,35 +139,33 @@ export default function Account() {
                       Login
                     </button>
                     <br />
-                    <a href="/">Forgot Password</a>
+                    {/*<a href="/">Forgot Password</a>*/}
                     <br />
-                    <button type="button" id="logout-btn" onClick={logout}>
-                      Logout
-                    </button>
+                    {/*<button type="button" id="logout-btn" onClick={logout}>Logout</button>*/}
                   </form>
                 ) : (
                   <form>
                     <input
-                      type="username"
+                      type="name"
                       name="username"
                       placeholder="Username"
                       value={admin.username}
                       onChange={handleChange}
-                    />{" "}
+                    />
                     <input
-                      type="email"
+                      type="name"
                       name="email"
                       placeholder="Email"
                       value={admin.email}
                       onChange={handleChange}
-                    />{" "}
+                    />
                     <input
                       type="password"
                       name="password"
                       placeholder="Password"
                       value={admin.password}
                       onChange={handleChange}
-                    />{" "}
+                    />
                     <button type="button" className="btn" onClick={register}>
                       Submit
                     </button>
