@@ -1,18 +1,20 @@
 import express from "express";
-import cors from "cors";
 import mongoose from "mongoose";
-import bodyParser from "body-parser";
+import cors from "cors";
 import dotenv from "dotenv";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 const server = express();
 
-// Using Middlewares
-server.use(cors());
-server.use(bodyParser.json());
 dotenv.config({ path: "../config.env" });
+
+server.use(express.json());
+server.use(cors());
 
 const DB = process.env.DATABASE;
 const PORT = process.env.PORT;
+const SECRET_KEY = process.env.KEY;
 
 // Connect to the MongoDB database
 mongoose
@@ -21,13 +23,89 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => {
-    console.log("Database connected to DeepStoreDB");
+    console.log("DB Connected");
   })
   .catch((error) => {
-    console.log(error);
+    console.error("Error connecting to MongoDB:", error);
   });
 
-// Create a schema for categories
+//Admin schema and model
+const adminSchema = new mongoose.Schema({
+  username: { type: String },
+  email: { type: String, unique: true },
+  password: { type: String },
+});
+const Admin = mongoose.model("Admin", adminSchema);
+
+// Helper function to create a JWT token
+function createToken(admin) {
+  return jwt.sign({ id: admin._id, email: admin.email }, SECRET_KEY, {
+    expiresIn: "1h",
+  });
+}
+
+// Registration route
+server.post("/register", async (req, res) => {
+  try {
+    const { username, email, password } = req.body;
+    const existingAdmin = await Admin.findOne({ email });
+    if (existingAdmin) {
+      return res
+        .status(400)
+        .json({ error: "Email already exists, Go to Login!" });
+    }
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newAdmin = new Admin({ username, email, password: hashedPassword });
+    await newAdmin.save();
+    const token = createToken(newAdmin);
+    res.json({ message: "Registration Successful!", token });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to register!" });
+  }
+});
+
+// Login route
+server.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const admin = await Admin.findOne({ email });
+    if (!admin) {
+      return res
+        .status(401)
+        .json({ error: "You are not registered, Register Now!" });
+    }
+    const isPasswordValid = await bcrypt.compare(password, admin.password);
+    if (!isPasswordValid) {
+      return res
+        .status(401)
+        .json({ error: "Incorrect password, Enter correct password!" });
+    }
+    const token = createToken(admin);
+    res.json({ message: "Login Successful", token });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to login" });
+  }
+});
+
+// Password reset route
+server.post("/forgot-password", async (req, res) => {
+  try {
+    const { email, newPassword } = req.body;
+    const admin = await Admin.findOne({ email });
+    if (!admin) {
+      return res.status(404).json({ error: "Admin not found!" });
+    }
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    admin.password = hashedPassword;
+    await admin.save();
+    res.json({ message: "Password updated successfully!" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to reset password!" });
+  }
+});
+
+//Category schema and model
 const categorySchema = new mongoose.Schema({
   category: String,
   products: [
@@ -171,6 +249,7 @@ server.put("/admin/dashboard/update-product/:category/:product", (req, res) => {
     res.status(404).json({ message: "Category not found" });
   }
 });
+
 // Route handler for fetching products
 server.get("/products", async (req, res) => {
   try {
@@ -228,61 +307,7 @@ server.post("/contact", async (req, res) => {
   }
 });
 
-// Create a schema for the admin
-const adminSchema = new mongoose.Schema({
-  username: String,
-  email: String,
-  password: String,
-});
-const Admin = mongoose.model("Admin", adminSchema);
-
-server.post("/login", (req, res) => {
-  const { email, password } = req.body; // Use the correct field names for email and password
-  Admin.findOne({ email: email, password: password }) // Use the correct field names for email and password
-    .then((admin) => {
-      if (admin) {
-        res.send({ message: "Login Successful", admin: admin });
-      } else {
-        res.send({ message: "Invalid email or password" });
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-      console.error("Error occurred while searching for admin");
-      res.sendStatus(500);
-    });
-});
-
-server.post("/register", (req, res) => {
-  const { username, email, password } = req.body; // Extract the fields from the request body
-  Admin.findOne({ email: email })
-    .then((user) => {
-      if (user) {
-        res.send({ message: "Admin already registered" });
-      } else {
-        const admin = new Admin({
-          username,
-          email, // Save the email field in the new Admin document
-          password,
-        });
-        admin
-          .save()
-          .then(() => {
-            res.send({ message: "Successfully Registered, Please Login Now" });
-          })
-          .catch((err) => {
-            console.log(err);
-            res.send({ message: "Error occurred while saving admin" });
-          });
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-      res.send({ message: "Error occurred while searching for admin" });
-    });
-});
-
 // Listening to the server at port
 server.listen(PORT, () => {
-  console.log(`Your server of Deep Store is running on port ${PORT}`);
+  console.log(`Your server is running on port ${PORT}`);
 });

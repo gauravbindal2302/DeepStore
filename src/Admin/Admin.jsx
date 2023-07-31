@@ -3,6 +3,21 @@ import { Link } from "react-router-dom";
 import "./Admin.css";
 import Account from "./Account/Account";
 
+const Header = () => {
+  return (
+    <div className="header-1">
+      <div className="logo">
+        <Link to="/">
+          <span>Deep Store</span>
+        </Link>
+        <Link to="/admin">
+          <span className="log-reg">Login | Register</span>
+        </Link>
+      </div>
+    </div>
+  );
+};
+
 const Header1 = () => {
   return (
     <div className="header-1">
@@ -54,11 +69,10 @@ function Admin({ title }) {
   return (
     <>
       <div className="admin-page">
-        <Header1 />
         <Account />
       </div>
     </>
   );
 }
 
-export { Admin, Header1, CRUD };
+export { Admin, Header, Header1, CRUD };

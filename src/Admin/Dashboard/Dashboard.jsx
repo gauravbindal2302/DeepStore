@@ -1,4 +1,4 @@
-import { Header1 } from "../Admin";
+import { Header } from "../Admin";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import "./Dashboard.css";
@@ -10,7 +10,7 @@ export default function Dashboard({ title }) {
 
   return (
     <>
-      <Header1 />
+      <Header />
       <hr />
       <div className="admin-header">
         <Link to="/admin/dashboard/add">
