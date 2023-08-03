@@ -4,8 +4,10 @@ import axios from "axios";
 import "./Add.css";
 
 export default function Add({ title }) {
+  const [categoryImage, setCategoryImage] = useState(null);
   const [categoryName, setCategoryName] = useState("");
   const [categories, setCategories] = useState([]);
+  const [productImage, setProductImage] = useState("");
   const [productName, setProductName] = useState("");
   const [productPrice, setProductPrice] = useState("");
   const [productMrp, setProductMrp] = useState("");
@@ -20,16 +22,32 @@ export default function Add({ title }) {
 
   const submitCategory = async (event) => {
     event.preventDefault();
-    const category = { category: categoryName };
+
+    // Check if the category name and image are empty
+    if (!categoryName || !event.target.image.files[0]) {
+      alert("Please fill in all fields");
+      return; // Prevent form submission
+    }
+
+    const formData = new FormData();
+    formData.append("category", categoryName);
+    formData.append("image", categoryImage);
+
     try {
       const response = await axios.post(
         "http://localhost:5000/admin/dashboard/add",
-        category
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
       if (response.status === 200) {
         alert("Category added successfully");
+        setCategoryImage(null);
         setCategoryName("");
-        getCategoryNames(); // Fetch updated category names
+        getCategoryNames();
       } else {
         console.log("Failed to add category");
       }
@@ -49,22 +67,44 @@ export default function Add({ title }) {
 
   const submitProduct = async (event) => {
     event.preventDefault();
-    const product = {
-      productName,
-      productPrice,
-      productMrp,
-      productSize,
-      productDescription,
-      category: selectedCategory,
-    };
+
+    // Check if any of the required fields are empty
+    if (
+      !selectedCategory ||
+      !productImage ||
+      !productName ||
+      !productPrice ||
+      !productMrp ||
+      !productSize ||
+      !productDescription
+    ) {
+      alert("Please fill in all fields");
+      return; // Prevent form submission
+    }
+
+    const formData = new FormData();
+    formData.append("category", selectedCategory);
+    formData.append("image", productImage);
+    formData.append("productName", productName);
+    formData.append("productPrice", productPrice);
+    formData.append("productMrp", productMrp);
+    formData.append("productSize", productSize);
+    formData.append("productDescription", productDescription);
+
     try {
       const response = await axios.post(
         "http://localhost:5000/admin/dashboard/add-product",
-        product
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
       if (response.status === 200) {
         alert("Product added successfully");
         setSelectedCategory("");
+        setProductImage("");
         setProductName("");
         setProductPrice("");
         setProductMrp("");
@@ -108,6 +148,7 @@ export default function Add({ title }) {
               name="image"
               accept="image/*"
               placeholder="Select product image"
+              onChange={(event) => setCategoryImage(event.target.files[0])}
             />
             <input
               type="name"
@@ -144,6 +185,7 @@ export default function Add({ title }) {
               name="image"
               accept="image/*"
               placeholder="Select product image"
+              onChange={(event) => setProductImage(event.target.files[0])}
             />
             <input
               type="name"

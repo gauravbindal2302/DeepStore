@@ -40,7 +40,6 @@ export default function Contact({ title }) {
     } else {
       axios.post("http://localhost:5000/contact", form).then((res) => {
         alert(res.data.message);
-        window.location.reload(); // Refresh the page
       });
     }
   }

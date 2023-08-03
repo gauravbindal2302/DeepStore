@@ -26,12 +26,15 @@ export default function FeaturedProducts() {
   const fetchProducts = async () => {
     try {
       const response = await axios.get("http://localhost:5000/products");
-      setProducts(response.data);
+      const productsWithImageUrl = response.data.map((product) => ({
+        ...product,
+        image: "http://localhost:5000/uploads/" + product.productImage,
+      }));
+      setProducts(productsWithImageUrl);
     } catch (error) {
       console.error("Error fetching products:", error);
     }
   };
-
   const responsive = {
     superLargeDesktop: {
       breakpoint: { max: 4000, min: 3000 },
@@ -74,12 +77,12 @@ export default function FeaturedProducts() {
                   <Link to={"/details/" + product._id}>
                     <img
                       alt={product.productName + " image"}
-                      src={product.productImage}
+                      src={product.image}
                     />
                   </Link>
                   <h4>{product.productName}</h4>
-                  <p>₹{product.productPrice}</p>
-                  <h6>₹{product.productMrp}</h6>
+                  <p>₹{product.productPrice}.00</p>
+                  <h6>₹{product.productMrp}.00</h6>
                   <br />
                   <Link to={"/details/" + product._id}>
                     <button className="BuyNow-Btn">View Product</button>

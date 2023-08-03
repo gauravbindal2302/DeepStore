@@ -9,7 +9,6 @@ export default function Products({ title }) {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [products, setProducts] = useState([]);
-  const [cartItems, setCartItems] = useState([]);
 
   useEffect(() => {
     fetchCategories();
@@ -32,7 +31,11 @@ export default function Products({ title }) {
   const fetchProducts = async () => {
     try {
       const response = await axios.get("http://localhost:5000/products");
-      setProducts(response.data);
+      const productsWithImageUrl = response.data.map((product) => ({
+        ...product,
+        image: "http://localhost:5000/uploads/" + product.productImage,
+      }));
+      setProducts(productsWithImageUrl);
     } catch (error) {
       console.error("Error fetching products:", error);
     }
@@ -40,21 +43,6 @@ export default function Products({ title }) {
 
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);
-  };
-
-  const handleAddToCart = (productId) => {
-    const selectedProduct = products.find(
-      (product) => product._id === productId
-    );
-
-    if (selectedProduct) {
-      const updatedCartItems = [...cartItems, selectedProduct];
-      setCartItems(updatedCartItems);
-      // Navigate to the cart page with cartItems as a query parameter
-      window.location.href = `/cart?items=${encodeURIComponent(
-        JSON.stringify(updatedCartItems)
-      )}`;
-    }
   };
 
   const filteredProducts = selectedCategory
@@ -96,26 +84,14 @@ export default function Products({ title }) {
                   />
                   <h4>{product.productName}</h4>
                 </Link>
-                <p>₹{product.productPrice}</p>
-                <h6>₹{product.productMrp}</h6>
+                <p>₹{product.productPrice}.00</p>
+                <h6>₹{product.productMrp}.00</h6>
                 <br />
                 <Link to={"/details/" + product._id}>
                   <button className="BuyNow-Btn">View Product</button>
                 </Link>
-                <Link
-                  to={{
-                    pathname: "/cart",
-                    search: `?items=${encodeURIComponent(
-                      JSON.stringify(cartItems)
-                    )}`,
-                  }}
-                >
-                  <button
-                    className="AddToCart-Btn"
-                    onClick={() => handleAddToCart(product._id)}
-                  >
-                    Add To Cart
-                  </button>
+                <Link to={"/cart?items=" + product._id}>
+                  <button className="AddToCart-Btn">Add To Cart</button>
                 </Link>
               </div>
             ))}

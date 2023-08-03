@@ -1,43 +1,39 @@
 .small-container {
   padding-left: 25px;
   padding-right: 25px;
-  min-height: 61vh;
 }
+
 #row {
+  height: 72.1vh;
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin-top: -46px;
 }
+
 #ProductImg {
-  width: 450px;
-  height: 450px;
+  max-height: 380px;
+  max-width: auto;
   object-fit: contain;
+  display: flex;
+  padding-left: 100px;
 }
+
 #col-2 {
   width: 50%;
 }
-.small-img-row {
-  display: flex;
-  justify-content: space-between;
-  width: 90%; /* decrease width by 10% */
-  margin: auto; /* center horizontally */
-}
-.small-img-col {
-  flex-basis: 24%;
-  cursor: pointer;
-  height: 90%; /* decrease height by 10% */
-}
-#col-2 {
-  padding: 20px;
-}
+
 .navigator {
   color: #555;
   font-size: 0.9rem;
 }
+
 .h1 {
-  margin: 5px 0;
   font-size: 1.8rem;
-  line-height: 1.4;
+  line-height: 1.3;
 }
+
 .h4 {
   font-size: 1.2rem;
   font-weight: bold;
@@ -45,17 +41,20 @@
   color: #555;
   display: inline-block;
 }
+
 .h6 {
   font-size: 0.9rem;
   text-decoration: 0.1rem solid line-through;
   color: #868585;
   display: inline-block;
 }
+
 select {
   margin: 15px 0;
   padding: 4px 10px;
   border: 1px solid #9c918f;
 }
+
 input {
   width: 40px;
   height: 26px;
@@ -65,28 +64,35 @@ input {
   border-radius: 5px;
   margin-left: 10px;
 }
+
 input:focus {
   outline: none;
 }
+
 h3 {
   font-size: 1.1rem;
 }
+
 .icon {
   color: #ff523b;
   margin-left: 10px !important;
 }
+
 .description {
   font-size: 0.9rem;
 }
+
 .AddToCart {
   height: 40px;
   width: 150px;
   margin-top: 24px;
 }
+
 .AddToCart:hover {
   color: #febd2f;
   background-color: #173334;
 }
+
 @media screen and (max-width: 796px) {
   .small-container {
     margin-top: 30px;

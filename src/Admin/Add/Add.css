@@ -3,10 +3,12 @@
   grid-template-columns: repeat(2, 50vw);
   width: 100vw;
 }
+
 .dashboard-col-1,
 .dashboard-col-2 {
   padding: 50px 100px;
 }
+
 .dashboard-row::after {
   content: "";
   position: absolute;
@@ -16,11 +18,13 @@
   transform: translateX(50vw);
   margin-top: 7%;
 }
+
 .dashboard-col-1 h1,
 .dashboard-col-2 h1 {
   text-align: center;
   margin: 20px 0;
 }
+
 .dashboard-row input,
 .dashboard-row select,
 .dashboard-row textarea {
@@ -31,10 +35,12 @@
   border: 0.01rem solid #393737;
   font-family: Arial, Helvetica, sans-serif;
 }
+
 .dashboard-row input {
   margin: 5px 0px;
   padding: 14px 10px;
 }
+
 .dashboard-row input[type="file"] {
   height: auto;
   padding: 7px;
@@ -43,15 +49,22 @@
 .view-table {
   margin: 30px 0px;
 }
+
 .dashboard-row select {
   margin: 10px 0px 5px 0px;
 }
+
+select option:first-child {
+  background: #e4e2e2;
+}
+
 .dashboard-col-2 textarea {
   height: 100px;
   margin: 5px 0px;
   font-size: 0.9rem;
   resize: none;
 }
+
 .admin-btn {
   width: 200px;
   margin: 5px 0;
@@ -59,20 +72,24 @@
   font-size: 15px;
   border: 0.01rem solid #315636;
 }
+
 @media only screen and (max-width: 800px) {
   .dashboard-row {
     grid-template-columns: 1fr;
     padding-top: 20px;
   }
+
   .dashboard-col-1,
   .dashboard-col-2 {
     width: 100%;
     padding: 50px 60px;
     position: relative; /* Add this */
   }
+
   .dashboard-row::after {
     display: none;
   }
+
   .dashboard-col-1::after {
     width: 70%;
     height: 4px;
@@ -83,12 +100,14 @@
     bottom: 0;
     transform: translateX(-50%); /* Adjusted translation */
   }
+
   .admin-btn {
     margin: 8px 0;
     width: auto;
     padding: 6px 20px;
     font-size: 14px;
   }
+
   .dashboard-row select {
     font-size: 15px;
   }

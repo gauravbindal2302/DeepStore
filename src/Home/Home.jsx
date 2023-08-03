@@ -28,7 +28,7 @@ export default function Home({ title }) {
       <div className="home-main">
         <Navbar />
         <div className="container">
-          <div className="row">
+          <div className="row" id="row">
             <div className="col">
               <div className="category-section">
                 <h3 className="category-section-title">
@@ -46,10 +46,11 @@ export default function Home({ title }) {
               </div>
             </div>
             <div className="col">
-              <img alt="" src="images/image1.png" />
+              <img alt="" src="Images/image-1.png" />
             </div>
           </div>
         </div>
+        <div className="bg" />
       </div>
       <FeaturedCategories />
       <FeaturedProducts />

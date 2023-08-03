@@ -1,25 +1,34 @@
 import { Header1, CRUD } from "../Admin";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./Delete.css";
 
 export default function Delete({ title }) {
   const [categories, setCategories] = useState([]);
-  const [deleteCategory, setDeleteCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   useEffect(() => {
     document.title = title;
     getCategoryNames();
   }, [title]);
 
+  const handleCategorySelect = (event) => {
+    setSelectedCategory(event.target.value);
+  };
+
   const handleDelete = async (event) => {
     event.preventDefault();
+    if (!selectedCategory) {
+      alert("Please select a category to delete");
+      return;
+    }
+
     try {
       await axios.delete(
-        `http://localhost:5000/admin/dashboard/delete/${deleteCategory}`
+        `http://localhost:5000/admin/dashboard/delete/${selectedCategory}`
       );
       alert("Category deleted successfully");
-      setDeleteCategory("");
+      setSelectedCategory("");
       getCategoryNames();
     } catch (error) {
       console.error("Error deleting category:", error);
@@ -55,12 +64,18 @@ export default function Delete({ title }) {
             ))}
           </table>
           <form onSubmit={handleDelete}>
-            <input
-              type="name"
-              placeholder="Delete Category"
-              value={deleteCategory}
-              onChange={(event) => setDeleteCategory(event.target.value)}
-            />
+            <select
+              name=""
+              value={selectedCategory}
+              onChange={handleCategorySelect}
+            >
+              <option>Select Category</option>
+              {categories.map((category) => (
+                <option key={category._id} value={category.category}>
+                  {category.category}
+                </option>
+              ))}
+            </select>
             <button type="submit" className="admin-btn">
               Delete Category
             </button>

@@ -4,13 +4,21 @@ import cors from "cors";
 import dotenv from "dotenv";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import multer from "multer";
+import path from "path";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
 
 const server = express();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 dotenv.config({ path: "../config.env" });
 
 server.use(express.json());
 server.use(cors());
+server.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 const DB = process.env.DATABASE;
 const PORT = process.env.PORT;
@@ -28,6 +36,18 @@ mongoose
   .catch((error) => {
     console.error("Error connecting to MongoDB:", error);
   });
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads"); // Specify the destination folder to store the images (create the 'uploads' folder in your project)
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + "-" + file.originalname); // Rename the file with a timestamp to avoid name collisions
+  },
+});
+
+const upload = multer({ storage: storage }); // Route handler for adding a new product
+// Route handler for adding a new product
 
 //Admin schema and model
 const adminSchema = new mongoose.Schema({
@@ -108,8 +128,10 @@ server.post("/forgot-password", async (req, res) => {
 //Category schema and model
 const categorySchema = new mongoose.Schema({
   category: String,
+  image: String,
   products: [
     {
+      productImage: String,
       productName: String,
       productPrice: String,
       productMrp: String,
@@ -121,23 +143,34 @@ const categorySchema = new mongoose.Schema({
 const Category = mongoose.model("Category", categorySchema);
 
 // Route handler for adding a new category
-server.post("/admin/dashboard/add", async (req, res) => {
-  const { category, products } = req.body;
-  try {
-    const newCategory = new Category({ category, products });
-    await newCategory.save();
-    res.sendStatus(200);
-  } catch (error) {
-    console.error("Error adding category:", error);
-    res.sendStatus(500);
+server.post(
+  "/admin/dashboard/add",
+  upload.single("image"),
+  async (req, res) => {
+    const { category } = req.body;
+    const image = req.file.filename; // Get the filename of the uploaded image
+
+    try {
+      const newCategory = new Category({ category, image, products: [] });
+      await newCategory.save();
+      res.sendStatus(200);
+    } catch (error) {
+      console.error("Error adding category:", error);
+      res.sendStatus(500);
+    }
   }
-});
+);
 
 // Reusable route handler function for fetching (view) categories
 const fetchCategories = async (req, res) => {
   try {
     const categories = await Category.find({});
-    res.send(categories);
+    res.send(
+      categories.map((category) => ({
+        ...category._doc,
+        image: `http://localhost:5000/uploads/${category.image}`, // Send the full image URL to the client
+      }))
+    );
   } catch (error) {
     console.error("Error fetching categories:", error);
     res.sendStatus(500);
@@ -148,20 +181,26 @@ const fetchCategories = async (req, res) => {
 server.get("/categories", fetchCategories);
 
 // Route handlers for updating categories
-server.put("/admin/dashboard/update/:category", async (req, res) => {
-  const { category } = req.params;
-  const { updatedCategoryName } = req.body;
-  try {
-    await Category.findOneAndUpdate(
-      { category },
-      { category: updatedCategoryName }
-    );
-    res.sendStatus(200);
-  } catch (error) {
-    console.error("Error updating category:", error);
-    res.sendStatus(500);
+server.put(
+  "/admin/dashboard/update/:category",
+  upload.single("categoryImage"),
+  async (req, res) => {
+    const { category } = req.params;
+    const { categoryName } = req.body;
+    const categoryImage = req.file.filename;
+
+    try {
+      await Category.findOneAndUpdate(
+        { category },
+        { category: categoryName, image: categoryImage }
+      );
+      res.sendStatus(200);
+    } catch (error) {
+      console.error("Error updating category:", error);
+      res.sendStatus(500);
+    }
   }
-});
+);
 
 // Route handlers for deleting categories
 server.delete("/admin/dashboard/delete/:category", async (req, res) => {
@@ -177,6 +216,7 @@ server.delete("/admin/dashboard/delete/:category", async (req, res) => {
 
 // Create a schema for products
 const productSchema = new mongoose.Schema({
+  productImage: String,
   productName: String,
   productPrice: String,
   productMrp: String,
@@ -186,39 +226,47 @@ const productSchema = new mongoose.Schema({
 });
 const Product = mongoose.model("Product", productSchema);
 
-// Route handler for adding a new product
-server.post("/admin/dashboard/add-product", async (req, res) => {
-  const {
-    productName,
-    productPrice,
-    productMrp,
-    productSize,
-    productDescription,
-    category,
-  } = req.body;
-  try {
-    const newProduct = new Product({
+server.post(
+  "/admin/dashboard/add-product",
+  upload.single("image"),
+  async (req, res) => {
+    const {
       productName,
       productPrice,
       productMrp,
       productSize,
       productDescription,
       category,
-    });
-    await newProduct.save();
+    } = req.body;
 
-    // Update the products array in the corresponding category
-    await Category.findOneAndUpdate(
-      { category },
-      { $push: { products: newProduct } }
-    );
+    const productImage = req.file.filename; // Get the filename of the uploaded image
 
-    res.sendStatus(200);
-  } catch (error) {
-    console.error("Error adding product:", error);
-    res.sendStatus(500);
+    try {
+      const newProduct = new Product({
+        productName,
+        productPrice,
+        productMrp,
+        productSize,
+        productDescription,
+        category,
+        productImage, // Save the filename in the 'productImage' field of the Product model
+      });
+      await newProduct.save();
+
+      // Update the products array in the corresponding category
+      await Category.findOneAndUpdate(
+        { category },
+        { $push: { products: newProduct } }
+      );
+
+      res.sendStatus(200);
+    } catch (error) {
+      console.error("Error adding product:", error);
+      res.sendStatus(500);
+    }
   }
-});
+);
+
 server.put("/admin/dashboard/update-product/:category/:product", (req, res) => {
   const category = req.params.category;
   const product = req.params.product;
@@ -263,9 +311,7 @@ server.get("/products", async (req, res) => {
 
 server.get("/details/:id", async (req, res) => {
   const { id } = req.params;
-
   try {
-    // Find the product with the given ID in the database
     const product = await Product.findById(id);
     if (product) {
       res.json(product);

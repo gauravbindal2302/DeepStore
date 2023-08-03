@@ -14,8 +14,12 @@ export default function ProductDetails() {
     const fetchProduct = async () => {
       try {
         const response = await axios.get(`http://localhost:5000/details/${id}`);
-        setProduct(response.data);
-        setCategoryName(response.data.categoryName);
+        const productWithImageUrl = {
+          ...response.data,
+          image: "http://localhost:5000/uploads/" + response.data.productImage,
+        };
+        setProduct(productWithImageUrl);
+        setCategoryName(response.data.category);
       } catch (error) {
         console.error("Error fetching product:", error);
       }
@@ -59,7 +63,7 @@ export default function ProductDetails() {
               <h3 className="h3">
                 Product Details <i className="icon fa fa-indent"></i>
               </h3>
-              <p className="description">{product.description}</p>
+              <p className="description">{product.productDescription}</p>
               <Link to="/cart">
                 <button type="submit" className="AddToCart">
                   Add To Cart

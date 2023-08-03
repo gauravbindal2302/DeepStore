@@ -1,9 +1,4 @@
-import React, { useState, useEffect } from "react";
-import "./Cart.css";
-import Navbar from "../Navbar/Navbar";
-import Footer from "../Footer/Footer";
-
-export default function Cart({ title }) {
+/*
   const [items, setItems] = useState([
     {
       id: 1,
@@ -42,7 +37,14 @@ export default function Cart({ title }) {
       quantity: 1,
     },
   ]);
+  */
+import React, { useState, useEffect } from "react";
+import "./Cart.css";
+import Navbar from "../Navbar/Navbar";
+import Footer from "../Footer/Footer";
 
+export default function Cart({ title }) {
+  const [items, setItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
 
   useEffect(() => {
@@ -78,7 +80,7 @@ export default function Cart({ title }) {
   return (
     <>
       <Navbar />
-      <div className="small-container cart-page">
+      <div className="small-container cart-page" id="cart">
         <table>
           <thead>
             <tr>

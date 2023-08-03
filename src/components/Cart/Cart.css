@@ -8,8 +8,10 @@
   height: auto;
   margin-bottom: 100px;
 }
-
-table {
+#cart {
+  min-height: 48vh;
+}
+#cart table {
   width: 100%;
   border-collapse: collapse;
 }
