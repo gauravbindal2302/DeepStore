@@ -48,6 +48,8 @@
 
 .view-table {
   margin: 30px 0px;
+  width: 100%;
+  border-collapse: collapse;
 }
 
 .dashboard-row select {

@@ -59,6 +59,9 @@ a {
 .copyright {
   text-align: center;
 }
+.developer {
+  color: #bc8817;
+}
 @media only screen and (max-width: 800px) {
   .footer {
     padding: 0;

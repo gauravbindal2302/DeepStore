@@ -2,8 +2,6 @@ import React from "react";
 import { NavLink, Link } from "react-router-dom";
 import "./Footer.css";
 
-const copyright = "Copyright 2023 - Deep Store";
-
 export default function Footer() {
   return (
     <>
@@ -44,7 +42,12 @@ export default function Footer() {
             </div>
           </div>
           <hr />
-          <p className="copyright">{copyright}</p>
+          <p className="copyright">
+            Copyright 2023 - Deep Store | Developed by{" "}
+            <a className="developer" href="mailto:gb2302bindal@gmail.com">
+              Gaurav Bindal
+            </a>
+          </p>
           <Link to="/admin" className="admin-in-footer">
             <span>Admin</span>
           </Link>

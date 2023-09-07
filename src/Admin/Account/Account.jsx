@@ -130,7 +130,7 @@ export default function Account() {
             <div className="container">
               <div className="row account-row">
                 <div className="col-2 col-lg-6">
-                  <img alt="" src="Images/image1.png" width="100%" />
+                  <img alt="" src="Images/image-1.png" width="100%" />
                 </div>
                 <div className="col-2 col-lg-6">
                   <div className="form-container">

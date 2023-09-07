@@ -31,7 +31,7 @@
 
 .h1 {
   font-size: 1.8rem;
-  line-height: 1.3;
+  line-height: 2;
 }
 
 .h4 {
@@ -49,22 +49,33 @@
   display: inline-block;
 }
 
+.quantity {
+  display: flex;
+  margin: 10px 0 20px 0;
+  align-items: center;
+}
 select {
-  margin: 15px 0;
-  padding: 4px 10px;
+  height: 26px;
+  padding: 0px 12px;
   border: 1px solid #9c918f;
+  border-radius: 5px;
+  font-size: 13px;
 }
 
 input {
-  width: 40px;
+  width: 60px;
   height: 26px;
-  padding-left: 5px;
+  padding: 0px 5px;
   font-size: 15px;
   border: 1px solid #9c918f;
   border-radius: 5px;
   margin-left: 10px;
 }
 
+.quantity p {
+  margin-left: 10px;
+  font-size: small;
+}
 input:focus {
   outline: none;
 }

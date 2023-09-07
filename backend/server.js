@@ -46,8 +46,7 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage: storage }); // Route handler for adding a new product
-// Route handler for adding a new product
+const upload = multer({ storage: storage });
 
 //Admin schema and model
 const adminSchema = new mongoose.Schema({
@@ -188,7 +187,6 @@ server.put(
     const { category } = req.params;
     const { categoryName } = req.body;
     const categoryImage = req.file.filename;
-
     try {
       await Category.findOneAndUpdate(
         { category },

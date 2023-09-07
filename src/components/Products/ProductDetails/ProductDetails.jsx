@@ -9,6 +9,9 @@ export default function ProductDetails() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [categoryName, setCategoryName] = useState("");
+  const [selectedOption, setSelectedOption] = useState("");
+  const [quantity, setQuantity] = useState(0);
+  const [packsText, setPacksText] = useState("");
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -28,6 +31,51 @@ export default function ProductDetails() {
     fetchProduct();
   }, [id]);
 
+  useEffect(() => {
+    if (selectedOption && quantity > 0) {
+      const costPerKg = product.productPrice / 1000;
+      const weightInKg = selectedOption / 1000;
+      const totalCost = costPerKg * quantity * weightInKg * 1000;
+
+      if (quantity === 1) {
+        const displayOption =
+          selectedOption >= 1000
+            ? `${selectedOption / 1000} kg`
+            : `${selectedOption} gm`;
+        setPacksText(`1 pack of ${displayOption} = ₹${totalCost.toFixed(2)}`);
+      } else if (quantity > 1) {
+        const displayOption =
+          selectedOption >= 1000
+            ? `${selectedOption / 1000} kg`
+            : `${selectedOption} gm`;
+        setPacksText(
+          `${quantity} packs of ${displayOption} = ₹${totalCost.toFixed(2)}`
+        );
+      } else {
+        setPacksText("");
+      }
+    }
+  }, [quantity, selectedOption, product]);
+
+  const handleOptionChange = (e) => {
+    const newSelectedOption = e.target.value;
+
+    if (newSelectedOption === "Select quantity") {
+      setSelectedOption("");
+      setQuantity(0);
+    } else {
+      setSelectedOption(newSelectedOption);
+      setQuantity(1);
+    }
+  };
+
+  const handleQuantityChange = (e) => {
+    const newQuantity = parseInt(e.target.value, 10);
+    if (newQuantity >= 0) {
+      setQuantity(newQuantity);
+    }
+  };
+
   return (
     <>
       <Navbar />
@@ -44,21 +92,37 @@ export default function ProductDetails() {
 
             <div id="col-2">
               <p className="navigator">
-                <Link to="/">Home</Link> / <Link to="#">{categoryName}</Link>
+                <Link to="/">Home</Link> / {categoryName}
               </p>
               <h1 className="h1">{product.productName}</h1>
-              <h4 className="h4">₹{product.productPrice}</h4>
-              <h6 className="h6">₹{product.productMrp}</h6>
+              <h4 className="h4">₹{product.productPrice}.00</h4>
+              <h6 className="h6">₹{product.productMrp}.00</h6>
               <br />
-              <select name="">
-                <option>Select Size</option>
-                <option>XXL</option>
-                <option>XL</option>
-                <option>Large</option>
-                <option>Medium</option>
-                <option>Small</option>
-              </select>
-              <input type="number" defaultValue="1" />
+              <div className="quantity">
+                <select
+                  name=""
+                  onChange={handleOptionChange}
+                  value={selectedOption}
+                >
+                  <option>Select quantity</option>
+                  <option value="250">250gm</option>
+                  <option value="500">500gm</option>
+                  <option value="1000">1Kg</option>
+                  <option value="5000">5Kg</option>
+                  <option value="10000">10Kg</option>
+                </select>
+                {selectedOption && (
+                  <>
+                    <input
+                      type="number"
+                      value={quantity}
+                      onChange={handleQuantityChange}
+                      min="1"
+                    />
+                    <p>{packsText}</p>
+                  </>
+                )}
+              </div>
 
               <h3 className="h3">
                 Product Details <i className="icon fa fa-indent"></i>
