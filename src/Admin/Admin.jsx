@@ -25,9 +25,6 @@ const Header1 = () => {
         <Link to="/">
           <span>Deep Store</span>
         </Link>
-        <Link to="/admin">
-          <span className="log-reg">Login / Register</span>
-        </Link>
         <Link to="/admin/dashboard">
           <span className="go-to-dashboard">Go to Dashboard</span>
         </Link>

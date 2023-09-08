@@ -6,6 +6,7 @@ import Products from "./components/Products/Products";
 import About from "./components/About/About";
 import Contact from "./components/Contact/Contact";
 import Cart from "./components/Cart/Cart";
+import SubmitOrder from "./Orders/SubmitOrder";
 import ProductDetails from "./components/Products/ProductDetails/ProductDetails";
 import { Admin } from "./Admin/Admin";
 import Dashboard from "./Admin/Dashboard/Dashboard";
@@ -50,6 +51,10 @@ export default function App() {
           element={<Contact title="Deep Store - Contact" />}
         />
         <Route path="/cart" element={<Cart title="Deep Store - Cart" />} />
+        <Route
+          path="/placeOrder"
+          element={<SubmitOrder title="Deep Store - Submit Order" />}
+        />
         <Route path="/admin" element={<Admin title="Deep Store - Admin" />} />
         <Route
           path="/admin/dashboard"

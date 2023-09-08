@@ -82,14 +82,33 @@ export default function FeaturedProducts() {
                   </Link>
                   <h4>{product.productName}</h4>
                   <p>₹{product.productPrice}.00</p>
-                  <h6>₹{product.productMrp}.00</h6>
+                  <h6 className="h6">
+                    ₹{product.productMrp}.00/
+                    <span style={{ fontSize: "13px" }}>Kg</span>
+                  </h6>
+                  <h5 className="h5">
+                    {Math.round(
+                      ((product.productMrp - product.productPrice) /
+                        product.productMrp) *
+                        100
+                    )}
+                    % OFF
+                  </h5>
                   <br />
                   <Link to={"/details/" + product._id}>
                     <button className="BuyNow-Btn">View Product</button>
                   </Link>
-                  <Link to="/cart">
-                    <button className="AddToCart-Btn">Add To Cart</button>
-                  </Link>
+                  {product.productSize === "Customizable" ? (
+                    <Link
+                      to={`/cart?productId=${product._id}&quantity=1&weight=1000`}
+                    >
+                      <button className="AddToCart-Btn">Add To Cart</button>
+                    </Link>
+                  ) : (
+                    <Link to={`/cart?productId=${product._id}&quantity=1`}>
+                      <button className="AddToCart-Btn">Add To Cart</button>
+                    </Link>
+                  )}
                 </div>
               ))}
           </Carousel>

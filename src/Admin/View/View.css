@@ -12,7 +12,6 @@
   position: absolute;
   width: 5px;
   height: 60%;
-  background: #000;
   transform: translateX(50vw);
   margin-top: 7%;
 }
@@ -36,7 +35,10 @@
   padding: 14px 10px;
 }
 #view-select-1 {
-  margin: 10px 0 0 0;
+  margin: 10px 0;
+}
+#view-select-2 {
+  margin-bottom: 10px;
 }
 .view-table {
   margin: 30px 0px;
@@ -47,9 +49,10 @@
 }
 
 .view .dashboard-row-view select {
-  margin: 10px 0px 5px 0px;
+  margin: 10px 0px 15px 0px;
   background-color: #f0ecec;
 }
+
 .dashboard-col-2 textarea {
   height: 100px;
   margin: 5px 0px;

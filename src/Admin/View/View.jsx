@@ -115,29 +115,20 @@ export default function View({ title }) {
                 <tr>
                   <td>1</td>
                   <td>{selectedProductDetails.productName}</td>
-                  <td
-                    style={{
-                      width: "80px",
-                      height: "80px",
-                      backgroundColor: "black",
-                      boxSizing: "border-box",
-                    }}
-                  >
+                  <td>
                     {selectedProductDetails.productImage && (
                       <img
-                        src={selectedProductDetails.productImage}
+                        src={
+                          "http://localhost:5000/uploads/" +
+                          selectedProductDetails.productImage
+                        }
                         alt={selectedProductDetails.productName}
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          objectFit: "cover",
-                          background: "yellow",
-                        }}
                       />
                     )}
                   </td>
-                  <td>{selectedProductDetails.productPrice}</td>
-                  <td>{selectedProductDetails.productMrp}</td>
+
+                  <td>₹{selectedProductDetails.productPrice}</td>
+                  <td>₹{selectedProductDetails.productMrp}</td>
                   <td>{selectedProductDetails.productSize}</td>
                   <td>{selectedProductDetails.productDescription}</td>
                 </tr>

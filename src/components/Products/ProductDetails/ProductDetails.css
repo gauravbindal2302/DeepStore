@@ -48,18 +48,27 @@
   color: #868585;
   display: inline-block;
 }
+.h5 {
+  display: inline-block;
+  margin-left: 10px;
+  font-size: 12px;
+  background: #dedbdb;
+  padding: 1px 4px;
+  border-radius: 5px;
+}
 
 .quantity {
   display: flex;
-  margin: 10px 0 20px 0;
+  margin: -10px 0 20px 0;
   align-items: center;
 }
-select {
+.quantity select {
   height: 26px;
   padding: 0px 12px;
   border: 1px solid #9c918f;
   border-radius: 5px;
   font-size: 13px;
+  margin-right: 10px;
 }
 
 input {
@@ -69,7 +78,6 @@ input {
   font-size: 15px;
   border: 1px solid #9c918f;
   border-radius: 5px;
-  margin-left: 10px;
 }
 
 .quantity p {

@@ -44,6 +44,7 @@
   padding-left: 20px;
   background-color: #febd2f;
   border-radius: 5px;
+  user-select: none;
 }
 
 .category-list li {
@@ -55,6 +56,7 @@
   color: #d4caca;
   margin-bottom: 8px;
   position: relative;
+  user-select: none;
 }
 
 .category-list li:hover,

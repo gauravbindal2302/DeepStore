@@ -89,7 +89,7 @@ export default function Delete({ title }) {
               <option key={category._id}>{category.category}</option>
             ))}
           </select>
-          <select name="" id="view-select-2">
+          <select name="" id="view-select-2" style={{ margin: "0 0 5px 0" }}>
             <option>Select Product</option>
             {categories.map((category) => (
               <option key={category._id}>{category.category}</option>

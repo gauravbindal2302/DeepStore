@@ -88,8 +88,14 @@ export default function Add({ title }) {
     formData.append("productName", productName);
     formData.append("productPrice", productPrice);
     formData.append("productMrp", productMrp);
-    formData.append("productSize", productSize);
     formData.append("productDescription", productDescription);
+
+    // Check the value of productSize and append it conditionally
+    if (productSize === "customizable") {
+      formData.append("productSize", "Customizable");
+    } else if (productSize === "non-customizable") {
+      formData.append("productSize", "Non-Customizable");
+    }
 
     try {
       const response = await axios.post(
@@ -208,13 +214,30 @@ export default function Add({ title }) {
               placeholder="Product MRP"
               onChange={(event) => setProductMrp(event.target.value)}
             />
-            <input
-              type="name"
-              name="productSize"
-              value={productSize}
-              placeholder="Product Size"
-              onChange={(event) => setProductSize(event.target.value)}
-            />
+            <div className="size">
+              <label>Size:</label>
+              <div className="checkboxes">
+                <div className="check-box">
+                  <input
+                    type="checkbox"
+                    id="customizable"
+                    checked={productSize === "customizable"}
+                    onChange={() => setProductSize("customizable")}
+                  />
+                  <label htmlFor="customizable">Customizable</label>
+                </div>
+                <div className="check-box">
+                  <input
+                    type="checkbox"
+                    id="non-customizable"
+                    checked={productSize === "non-customizable"}
+                    onChange={() => setProductSize("non-customizable")}
+                  />
+                  <label htmlFor="non-customizable">Non-Customizable</label>
+                </div>
+              </div>
+            </div>
+
             <textarea
               placeholder="Product Description"
               name="productDescription"

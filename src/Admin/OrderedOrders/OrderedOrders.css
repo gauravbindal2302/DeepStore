@@ -1,26 +1,93 @@
-.orders-ordered-row {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  padding: 30px 100px;
-  grid-gap: 50px;
+.orders-ordered {
+  margin: 40px 80px;
 }
+.order-id {
+  display: block;
+}
+.main-row {
+  margin: 30px 0;
+  border-radius: 20px;
+  border: 1px solid #133334;
+}
+.first-row {
+  padding: 12px 0;
+  text-align: center;
+  border-bottom: 1px solid#000;
+  letter-spacing: 2px;
+  font-family: "Courier New", Courier, monospace;
+  font-weight: 600;
+}
+.second-row {
+  padding: 14px;
+  display: flex;
+  justify-content: space-between;
+}
+
 .orders-ordered h1 {
-  font-size: 1.8rem;
-  margin: 10px 0 20px 0;
+  margin-top: -10px;
+  font-size: 24px;
   text-align: center;
 }
-.customer-details h4 {
-  display: inline-block;
-  font-size: 1.1rem;
+
+/* New styles for the customer and order tables */
+.customer-details {
+  width: 30%; /* Adjust the width as needed */
+  padding: 15px;
 }
-.customer-details span {
-  display: inline-block;
-  font-size: 1rem;
-  margin: 0 10px;
+.order-details {
+  width: 70%; /* Adjust the width as needed */
+  padding: 15px;
 }
-@media only screen and (max-width: 800px) {
-  .orders-ordered-row {
-    grid-template-columns: repeat(1, 1fr);
-    padding: 20px 50px;
-  }
+
+.customer-details h1,
+.order-details h1 {
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+.customer-details table,
+.order-details table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.customer-details th,
+.customer-details td,
+.order-details th,
+.order-details td {
+  border: 1px solid #c3c3c3;
+  padding: 8px;
+  font-size: smaller;
+  text-align: center;
+}
+
+/* Alternate row background color */
+.customer-details tbody tr:nth-child(odd),
+.order-details tbody tr:nth-child(odd) {
+  background-color: #e5eaea;
+}
+
+/* Header styles for the order table */
+.order-details thead {
+  background-color: #133334;
+  color: #d4d7d7;
+  font-weight: bold;
+}
+.order-summary {
+  list-style-type: square;
+  font-size: 14px;
+  margin: 15px 0 20px 30px;
+  line-height: 2;
+}
+.confirm-order {
+  margin-left: 20px;
+  padding: 10px 40px;
+  border-radius: 5px;
+  cursor: pointer;
+  border: none;
+  letter-spacing: 1px;
+}
+.confirm-order:hover {
+  background-color: #173334;
+  color: #ebb43d;
 }

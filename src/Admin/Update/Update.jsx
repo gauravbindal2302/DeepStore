@@ -8,11 +8,26 @@ export default function Update({ title }) {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [updatedCategoryImage, setUpdatedCategoryImage] = useState("");
   const [updatedCategoryName, setUpdatedCategoryName] = useState("");
+  const [selectedProduct, setSelectedProduct] = useState("");
+  const [filteredProducts, setFilteredProducts] = useState([]);
 
   useEffect(() => {
     document.title = title;
     getCategoryNames();
   }, [title]);
+
+  useEffect(() => {
+    if (selectedCategory) {
+      const category = categories.find(
+        (category) => category.category === selectedCategory
+      );
+      setFilteredProducts(category ? category.products : []);
+      setSelectedProduct("");
+    } else {
+      setFilteredProducts([]);
+      setSelectedProduct("");
+    }
+  }, [selectedCategory, categories]);
 
   const getCategoryNames = async () => {
     try {
@@ -23,6 +38,17 @@ export default function Update({ title }) {
     }
   };
 
+  const getSelectedProductDetails = () => {
+    if (selectedProduct) {
+      const product = filteredProducts.find(
+        (product) => product.productName === selectedProduct
+      );
+      return product;
+    }
+    return null;
+  };
+
+  const selectedProductDetails = getSelectedProductDetails();
   const handleCategorySelect = (event) => {
     setSelectedCategory(event.target.value);
   };
@@ -116,16 +142,23 @@ export default function Update({ title }) {
         </div>
         <div className="dashboard-col-2">
           <h1>Update Product</h1>
-          <select name="" id="view-select-1">
+          <select>
             <option>Select Category</option>
             {categories.map((category) => (
               <option key={category._id}>{category.category}</option>
             ))}
           </select>
-          <select name="" id="view-select-2">
-            <option>Select Product</option>
-            {categories.map((category) => (
-              <option key={category._id}>{category.category}</option>
+          <select
+            id="view-select-2"
+            value={selectedProduct}
+            onChange={(event) => setSelectedProduct(event.target.value)}
+            style={{ margin: "5px 0" }}
+          >
+            <option value="">Select Product</option>
+            {filteredProducts.map((product) => (
+              <option key={product._id} value={product.productName}>
+                {product.productName}
+              </option>
             ))}
           </select>
           <input
