@@ -1,24 +1,44 @@
 .admin-header {
   height: auto;
-  width: 100vw;
+  padding: 10px 90px;
+  margin: 40px 150px 30px 150px;
+  border: 1px solid #000;
+  border-radius: 10px;
+}
+.admin-header h1,
+.orders-row h1 {
+  margin-bottom: 15px;
+  text-align: center;
+  font-size: 20px;
+}
+
+.operations {
   display: grid;
-  background: #121212;
   grid-template-columns: repeat(4, 1fr);
   justify-items: center;
   align-items: center;
-  padding: 30px 90px;
-  grid-gap: 30px;
+  margin-bottom: 15px;
 }
 .orders-row {
-  padding: 30px 130px;
-  width: 100vw;
-  background: #121212;
+  height: auto;
+  padding: 10px 90px;
+  margin: 20px 150px 30px 150px;
+  border: 1px solid #000;
+  border-radius: 10px;
+}
+.order-buttons {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-gap: 100px;
+  grid-template-columns: repeat(2, 1fr); /* Two columns with equal width */
+  justify-items: center;
+  align-items: center;
+}
+
+.order-buttons button {
+  margin-right: 15px;
+  margin-bottom: 15px;
+  width: 100%; /* Make the buttons occupy 100% of their container's width */
 }
 .admin-button {
-  width: 100%;
   margin: auto;
   padding: 8px 100px;
   background-color: #febd2f;

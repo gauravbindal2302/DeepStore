@@ -108,10 +108,17 @@ export default function ProductDetails() {
               <h1 className="h1">{product.productName}</h1>
               <div className="price">
                 <h4 className="h4">₹{product.productPrice}.00</h4>
-                <h6 className="h6">
-                  ₹{product.productMrp}.00/
-                  <span style={{ fontSize: "13px" }}>Kg</span>
-                </h6>
+                {product.productSize === "Customizable" ? (
+                  <h6 className="h6">
+                    ₹{product.productMrp}.00/
+                    <span style={{ fontSize: "13px" }}>Kg</span>
+                  </h6>
+                ) : (
+                  <h6 className="h6">
+                    ₹{product.productMrp}.00/
+                    <span style={{ fontSize: "13px" }}>unit</span>
+                  </h6>
+                )}
                 <h5 className="h5">
                   {Math.round(
                     ((product.productMrp - product.productPrice) /

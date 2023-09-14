@@ -61,11 +61,11 @@ td img {
 .total-price {
   display: flex;
   justify-content: flex-end;
+  border-top: 3px solid #173334;
 }
 .total-price table {
-  border-top: 3px solid #173334;
-  width: 100%;
-  max-width: 400px;
+  max-width: 300px;
+  margin: 10px 0;
 }
 
 th:last-child,
@@ -90,13 +90,13 @@ td:last-child {
 .place-order-btn {
   background-color: #eeb02a;
   color: #173334;
-  margin-top: 20px;
-  width: calc(100% - 10px);
+  width: 300px;
   max-width: 400px;
   margin-left: auto;
-  height: 50px;
-  font-size: 18px;
+  height: 40px;
+  font-size: 16px;
   font-weight: bold;
+  letter-spacing: 1.5px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -107,13 +107,169 @@ td:last-child {
   color: #e7e2e2;
 }
 
-#cart span {
+#cart.span {
   display: flex;
   justify-content: center;
   font-size: 50px;
   margin-top: 100px;
   color: #898b8b;
   user-select: none;
+}
+
+.order {
+  margin-top: 80px;
+  margin-bottom: 50px;
+}
+
+.order form {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.address-section,
+.payment-section {
+  flex: 1;
+  padding: 12px 15px;
+  margin-right: 15px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+.payment-section {
+  margin-right: 0;
+}
+
+.order h3 {
+  margin-bottom: 15px;
+  font-size: 20px;
+  letter-spacing: 1px;
+}
+
+.form-group {
+  margin-bottom: 5px;
+}
+.form-group-payment {
+  display: flex;
+  width: 100%;
+  margin-bottom: 10px;
+  align-items: center;
+}
+.order label {
+  font-weight: 500;
+  display: block;
+  letter-spacing: 0.5px;
+}
+
+.order input[type="text"],
+.order input[type="tel"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.order input[type="radio"] {
+  margin-right: 10px;
+  height: 16px;
+  width: 16px;
+}
+.payment-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.payment-heading h3:nth-child(2) {
+  color: rgb(106, 106, 106);
+  font-size: 15px;
+}
+#COD-Note {
+  text-align: center;
+  color: rgb(120, 119, 119);
+  font-size: 12px;
+  letter-spacing: 1px;
+  margin-top: 30px;
+}
+
+.form-group-payment label {
+  font-size: 14px;
+}
+
+button.submit-order-btn {
+  background-color: #eeb02a;
+  color: #173334;
+  border: none;
+  padding: 12px 50px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  letter-spacing: 1.5px;
+  margin: 6px 0 40px 0;
+}
+.hidden {
+  display: none;
+}
+
+.total-price {
+  display: flex;
+  justify-content: flex-end;
+  border-top: 3px solid #173334;
+}
+
+.total-price.border-bottom {
+  border-bottom: 3px solid #173334;
+}
+
+button.submit-order-btn:hover {
+  color: #e0e0e0;
+  background-color: #173334;
+}
+.UPI-section,
+.COD-section {
+  display: flex;
+  flex-direction: column;
+  margin-left: 25px;
+}
+.UPI-section ul {
+  margin-top: -10px;
+  font-size: 13px;
+  line-height: 3;
+  margin-bottom: 20px;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+  color: #616161;
+}
+
+.UPI-section li {
+  list-style: none;
+  font-size: 11px;
+  display: flex;
+  line-height: 2;
+}
+.UPI-section li label {
+  width: 10%;
+  color: #606161;
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.UPI-section li span {
+  width: 90%;
+  display: flex;
+  letter-spacing: 0.5px;
+  align-items: center;
+  color: #6e6c81;
+}
+#upi-number {
+  color: orange;
+}
+.UPI-section p,
+.COD-section p {
+  font-size: 0.8rem;
+  margin-bottom: 15px;
+  letter-spacing: 1.5px;
+  color: #276356;
+  font-weight: 500;
 }
 
 @media only screen and (max-width: 796px) {
@@ -156,5 +312,11 @@ td:last-child {
     width: 100%;
     font-size: 1rem;
     margin-bottom: 100px;
+  }
+
+  .address-section,
+  .payment-section {
+    margin-right: 0;
+    margin-top: 10px;
   }
 }

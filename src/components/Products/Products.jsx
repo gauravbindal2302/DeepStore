@@ -9,6 +9,7 @@ export default function Products({ title }) {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [products, setProducts] = useState([]);
+  const [selectedSortingOption, setSelectedSortingOption] = useState("");
 
   useEffect(() => {
     fetchCategories();
@@ -49,6 +50,14 @@ export default function Products({ title }) {
     ? products.filter((product) => product.category === selectedCategory)
     : products;
 
+  const sortedProducts = [...filteredProducts]; // Create a copy to avoid mutating the original array
+
+  if (selectedSortingOption === "lowToHigh") {
+    sortedProducts.sort((a, b) => a.productPrice - b.productPrice);
+  } else if (selectedSortingOption === "highToLow") {
+    sortedProducts.sort((a, b) => b.productPrice - a.productPrice);
+  }
+
   return (
     <>
       <Navbar />
@@ -73,9 +82,21 @@ export default function Products({ title }) {
         <div className="small-container">
           <div className="row row-2">
             <h2>All Products</h2>
+            <h2>
+              <select
+                name=""
+                id=""
+                value={selectedSortingOption}
+                onChange={(e) => setSelectedSortingOption(e.target.value)}
+              >
+                <option value="">Sort Products</option>
+                <option value="lowToHigh">Price: Low to High</option>
+                <option value="highToLow">Price: High to Low</option>
+              </select>
+            </h2>
           </div>
           <div className="products-list">
-            {filteredProducts.map((product) => (
+            {sortedProducts.map((product) => (
               <div className="product" key={product._id}>
                 <Link to={"/details/" + product._id}>
                   <img
@@ -85,7 +106,17 @@ export default function Products({ title }) {
                   <h4>{product.productName}</h4>
                 </Link>
                 <p>₹{product.productPrice}.00</p>
-                <h6>₹{product.productMrp}.00</h6>
+                {product.productSize === "Customizable" ? (
+                  <h6 className="h6">
+                    ₹{product.productMrp}.00/
+                    <span style={{ fontSize: "13px" }}>Kg</span>
+                  </h6>
+                ) : (
+                  <h6 className="h6">
+                    ₹{product.productMrp}.00/
+                    <span style={{ fontSize: "13px" }}>unit</span>
+                  </h6>
+                )}
                 <h5 className="h5">
                   {Math.round(
                     ((product.productMrp - product.productPrice) /

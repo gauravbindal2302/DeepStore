@@ -79,13 +79,20 @@ export default function FeaturedProducts() {
                       alt={product.productName + " image"}
                       src={product.image}
                     />
+                    <h4>{product.productName}</h4>
                   </Link>
-                  <h4>{product.productName}</h4>
                   <p>₹{product.productPrice}.00</p>
-                  <h6 className="h6">
-                    ₹{product.productMrp}.00/
-                    <span style={{ fontSize: "13px" }}>Kg</span>
-                  </h6>
+                  {product.productSize === "Customizable" ? (
+                    <h6 className="h6">
+                      ₹{product.productMrp}.00/
+                      <span style={{ fontSize: "13px" }}>Kg</span>
+                    </h6>
+                  ) : (
+                    <h6 className="h6">
+                      ₹{product.productMrp}.00/
+                      <span style={{ fontSize: "13px" }}>unit</span>
+                    </h6>
+                  )}
                   <h5 className="h5">
                     {Math.round(
                       ((product.productMrp - product.productPrice) /
