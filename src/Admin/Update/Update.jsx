@@ -1,15 +1,21 @@
+import React, { useState, useEffect } from "react";
 import { Header1, CRUD } from "../Admin";
-import { useState, useEffect } from "react";
 import axios from "axios";
-import "./Update.css";
 
 export default function Update({ title }) {
-  const [categories, setCategories] = useState([]); //View categories
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory1, setSelectedCategory1] = useState("");
+  const [selectedCategory2, setSelectedCategory2] = useState("");
   const [updatedCategoryImage, setUpdatedCategoryImage] = useState("");
   const [updatedCategoryName, setUpdatedCategoryName] = useState("");
   const [selectedProduct, setSelectedProduct] = useState("");
-  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [categoryProducts, setCategoryProducts] = useState([]);
+  const [updatedProductImage, setUpdatedProductImage] = useState("");
+  const [updatedProductName, setUpdatedProductName] = useState("");
+  const [updatedProductPrice, setUpdatedProductPrice] = useState("");
+  const [updatedProductMrp, setUpdatedProductMrp] = useState("");
+  const [productSize, setProductSize] = useState("");
+  const [productDescription, setProductDescription] = useState("");
 
   useEffect(() => {
     document.title = title;
@@ -17,17 +23,32 @@ export default function Update({ title }) {
   }, [title]);
 
   useEffect(() => {
-    if (selectedCategory) {
+    const selectedCategoryValue = selectedCategory1;
+    if (selectedCategoryValue) {
       const category = categories.find(
-        (category) => category.category === selectedCategory
+        (category) => category.category === selectedCategoryValue
       );
-      setFilteredProducts(category ? category.products : []);
+      setCategoryProducts(category ? category.products : []);
       setSelectedProduct("");
     } else {
-      setFilteredProducts([]);
+      setCategoryProducts([]);
       setSelectedProduct("");
     }
-  }, [selectedCategory, categories]);
+  }, [selectedCategory1, categories]);
+
+  useEffect(() => {
+    const selectedCategoryValue = selectedCategory2;
+    if (selectedCategoryValue) {
+      const category = categories.find(
+        (category) => category.category === selectedCategoryValue
+      );
+      setCategoryProducts(category ? category.products : []);
+      setSelectedProduct("");
+    } else {
+      setCategoryProducts([]);
+      setSelectedProduct("");
+    }
+  }, [selectedCategory2, categories]);
 
   const getCategoryNames = async () => {
     try {
@@ -38,48 +59,90 @@ export default function Update({ title }) {
     }
   };
 
-  const getSelectedProductDetails = () => {
-    if (selectedProduct) {
-      const product = filteredProducts.find(
-        (product) => product.productName === selectedProduct
-      );
-      return product;
-    }
-    return null;
-  };
-
-  const selectedProductDetails = getSelectedProductDetails();
-  const handleCategorySelect = (event) => {
-    setSelectedCategory(event.target.value);
-  };
-
   const handleUpdateCategory = async (event) => {
     event.preventDefault();
-    if (!selectedCategory || !updatedCategoryImage || !updatedCategoryName) {
-      alert("Please fill in all fields");
-    } else {
-      try {
-        const formData = new FormData();
-        formData.append("categoryImage", updatedCategoryImage);
-        formData.append("categoryName", updatedCategoryName);
+    const selectedCategory = selectedCategory1 || selectedCategory2;
 
-        await axios.put(
-          `http://localhost:5000/admin/dashboard/update/${selectedCategory}`,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
-        alert("Category updated successfully");
-        setSelectedCategory("");
-        setUpdatedCategoryImage("");
-        setUpdatedCategoryName("");
-        getCategoryNames();
-      } catch (error) {
-        console.error("Error updating category:", error);
+    if (!selectedCategory || (!updatedCategoryImage && !updatedCategoryName)) {
+      alert("Please fill in either category name or select an image");
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append("categoryImage", updatedCategoryImage);
+      formData.append("categoryName", updatedCategoryName);
+
+      await axios.put(
+        `http://localhost:5000/admin/dashboard/update/${selectedCategory}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      alert(`Category (${selectedCategory}) updated successfully!`);
+      setSelectedCategory1("");
+      setSelectedCategory2("");
+      setUpdatedCategoryImage("");
+      setUpdatedCategoryName("");
+      getCategoryNames();
+    } catch (error) {
+      console.error("Error updating category:", error);
+    }
+  };
+
+  const handleUpdateProduct = async (event) => {
+    event.preventDefault();
+
+    if (!selectedCategory2 || !selectedProduct) {
+      alert("Please select both category and product to update.");
+      return;
+    }
+
+    let updatedProductSize = productSize; // Initialize with the current productSize
+
+    // If Customizable checkbox is not selected, set productSize to "Non-Customizable"
+    if (productSize !== "Customizable") {
+      updatedProductSize = "Non-Customizable";
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append("category", selectedCategory2);
+      formData.append("product", selectedProduct);
+      formData.append("productName", updatedProductName);
+      formData.append("productPrice", updatedProductPrice);
+      formData.append("productMrp", updatedProductMrp);
+      formData.append("productSize", updatedProductSize); // Use the updated productSize
+      formData.append("productDescription", productDescription);
+
+      // Add this part to handle the product image
+      if (updatedProductImage) {
+        formData.append("productImage", updatedProductImage);
       }
+
+      await axios.put(
+        `http://localhost:5000/admin/dashboard/update/product/${selectedCategory2}/${selectedProduct}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      alert(`Product (${selectedProduct}) updated successfully!`);
+      // Clear or update state as needed
+      setUpdatedProductName("");
+      setUpdatedProductPrice("");
+      setUpdatedProductMrp("");
+      setProductSize(updatedProductSize); // Update the productSize in the state
+      setProductDescription("");
+      setUpdatedProductImage(""); // Clear the product image state as well
+    } catch (error) {
+      console.error("Error updating product:", error);
     }
   };
 
@@ -108,11 +171,10 @@ export default function Update({ title }) {
           </table>
           <form onSubmit={handleUpdateCategory} encType="multipart/form-data">
             <select
-              name=""
-              value={selectedCategory}
-              onChange={handleCategorySelect}
+              value={selectedCategory1}
+              onChange={(event) => setSelectedCategory1(event.target.value)}
             >
-              <option>Select Category</option>
+              <option value="">Select Category</option>
               {categories.map((category) => (
                 <option key={category._id} value={category.category}>
                   {category.category}
@@ -121,17 +183,17 @@ export default function Update({ title }) {
             </select>
             <input
               type="file"
-              id="image"
-              name="image"
+              id="categoryImage"
+              name="categoryImage"
               accept="image/*"
-              placeholder="Select product image"
+              placeholder="Select category image"
               onChange={(event) =>
                 setUpdatedCategoryImage(event.target.files[0])
               }
             />
             <input
               type="name"
-              placeholder="Update Category"
+              placeholder="Update Category Name"
               value={updatedCategoryName}
               onChange={(event) => setUpdatedCategoryName(event.target.value)}
             />
@@ -142,44 +204,101 @@ export default function Update({ title }) {
         </div>
         <div className="dashboard-col-2">
           <h1>Update Product</h1>
-          <select>
-            <option>Select Category</option>
-            {categories.map((category) => (
-              <option key={category._id}>{category.category}</option>
-            ))}
-          </select>
-          <select
-            id="view-select-2"
-            value={selectedProduct}
-            onChange={(event) => setSelectedProduct(event.target.value)}
-            style={{ margin: "5px 0" }}
-          >
-            <option value="">Select Product</option>
-            {filteredProducts.map((product) => (
-              <option key={product._id} value={product.productName}>
-                {product.productName}
-              </option>
-            ))}
-          </select>
-          <input
-            type="file"
-            id="image"
-            name="image"
-            accept="image/*"
-            placeholder="Select product image"
-          />
-          <input type="name" placeholder="Update Product Name" />
-          <input type="name" placeholder="Update Product Price" />
-          <input type="name" placeholder="Update Product MRP" />
-          <input type="name" placeholder="Update Product Size" />
-          <textarea
-            placeholder="Update Product Description"
-            name="message"
-            id=""
-          />
-          <button type="submit" className="admin-btn">
-            Update Product
-          </button>
+          <form onSubmit={handleUpdateProduct} encType="multipart/form-data">
+            <select
+              value={selectedCategory2}
+              onChange={(event) => setSelectedCategory2(event.target.value)}
+            >
+              <option value="">Select Category</option>
+              {categories.map((category) => (
+                <option key={category._id} value={category.category}>
+                  {category.category} (Total: {category.products.length}{" "}
+                  {category.products.length === 1 ? "product" : "products"})
+                </option>
+              ))}
+            </select>
+            <select
+              value={selectedProduct}
+              onChange={(event) => setSelectedProduct(event.target.value)}
+              style={{ margin: "5px 0" }}
+            >
+              <option value="">Select Product</option>
+              {categoryProducts.map((product) => (
+                <option key={product._id} value={product.productName}>
+                  {product.productName}
+                </option>
+              ))}
+            </select>
+            <input
+              type="file"
+              id="productImage"
+              name="productImage"
+              accept="image/*"
+              placeholder="Select product image"
+              onChange={(event) =>
+                setUpdatedProductImage(event.target.files[0])
+              }
+            />
+
+            <input
+              type="name"
+              name="productName"
+              value={updatedProductName}
+              placeholder="Product Name"
+              onChange={(event) => setUpdatedProductName(event.target.value)}
+            />
+            <input
+              type="name"
+              name="productPrice"
+              value={updatedProductPrice}
+              placeholder="Product Price"
+              onChange={(event) => setUpdatedProductPrice(event.target.value)}
+            />
+            <input
+              type="name"
+              name="productMrp"
+              value={updatedProductMrp}
+              placeholder="Product MRP"
+              onChange={(event) => setUpdatedProductMrp(event.target.value)}
+            />
+            <div className="size">
+              <label>Size:</label>
+              <div className="checkboxes">
+                <div className="check-box">
+                  <input
+                    type="checkbox"
+                    id="customizable"
+                    checked={productSize === "customizable"}
+                    onChange={() => setProductSize("customizable")}
+                  />
+                  <label htmlFor="customizable">Customizable</label>
+                </div>
+                <div className="check-box">
+                  <input
+                    type="checkbox"
+                    id="non-customizable"
+                    checked={productSize === "non-customizable"}
+                    onChange={() => setProductSize("non-customizable")}
+                  />
+                  <label htmlFor="non-customizable">Non-Customizable</label>
+                </div>
+              </div>
+            </div>
+            <textarea
+              placeholder="Product Description"
+              name="productDescription"
+              id=""
+              value={productDescription}
+              onChange={(event) => setProductDescription(event.target.value)}
+            />
+            <button
+              type="submit"
+              className="admin-btn"
+              onClick={handleUpdateProduct}
+            >
+              Update Product
+            </button>
+          </form>
         </div>{" "}
       </div>
     </>

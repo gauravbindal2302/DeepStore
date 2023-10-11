@@ -35,7 +35,6 @@ export default function FeaturedCategories() {
               <div className="category-information">
                 <span className="category-title">{category.category}</span>
                 <p>{category.content}</p>
-                <button className="GoToCategoryBtn">Go To Category</button>
               </div>
             </div>
           ))}

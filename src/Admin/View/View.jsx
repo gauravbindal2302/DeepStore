@@ -82,7 +82,8 @@ export default function View({ title }) {
             <option value="">Select Category</option>
             {categories.map((category) => (
               <option key={category._id} value={category.category}>
-                {category.category}
+                {category.category} (Total: {category.products.length}{" "}
+                {category.products.length === 1 ? "product" : "products"})
               </option>
             ))}
           </select>

@@ -16,13 +16,26 @@ export default function ProductDetails() {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/details/${id}`);
-        const productWithImageUrl = {
-          ...response.data,
-          image: "http://localhost:5000/uploads/" + response.data.productImage,
-        };
-        setProduct(productWithImageUrl);
-        setCategoryName(response.data.category);
+        const categoriesResponse = await axios.get(
+          "http://localhost:5000/categories"
+        );
+        // Fetch all products with their categories
+        const productsWithImageUrl = categoriesResponse.data.reduce(
+          (accumulator, category) => [
+            ...accumulator,
+            ...category.products.map((product) => ({
+              ...product,
+              category: category.category, // Add category to the product object
+              image: "http://localhost:5000/uploads/" + product.productImage,
+            })),
+          ],
+          []
+        );
+        const selectedProduct = productsWithImageUrl.find(
+          (product) => product._id === id
+        );
+        setProduct(selectedProduct);
+        setCategoryName(selectedProduct.category);
       } catch (error) {
         console.error("Error fetching product:", error);
       }

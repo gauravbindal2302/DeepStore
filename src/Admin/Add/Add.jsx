@@ -44,7 +44,7 @@ export default function Add({ title }) {
         }
       );
       if (response.status === 200) {
-        alert("Category added successfully");
+        alert(`Category (${categoryName}) added successfully!`);
         setCategoryImage(null);
         setCategoryName("");
         getCategoryNames();
@@ -108,7 +108,7 @@ export default function Add({ title }) {
         }
       );
       if (response.status === 200) {
-        alert("Product added successfully");
+        alert(`Product (${productName}) added successfully!`);
         setSelectedCategory("");
         setProductImage("");
         setProductName("");
@@ -173,14 +173,14 @@ export default function Add({ title }) {
           <form onSubmit={submitProduct} encType="multipart/form-data">
             <select
               id="categorySelect"
-              name=""
               value={selectedCategory}
               onChange={(event) => setSelectedCategory(event.target.value)}
             >
               <option>Select Category</option>
               {categories.map((category) => (
                 <option key={category._id} value={category.category}>
-                  {category.category}
+                  {category.category} (Total: {category.products.length}{" "}
+                  {category.products.length === 1 ? "product" : "products"})
                 </option>
               ))}
             </select>

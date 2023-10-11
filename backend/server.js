@@ -265,36 +265,102 @@ server.post(
   }
 );
 
-server.put("/admin/dashboard/update-product/:category/:product", (req, res) => {
-  const category = req.params.category;
-  const product = req.params.product;
-  const updatedProduct = req.body;
+server.put(
+  "/admin/dashboard/update/product/:category/:product",
+  async (req, res) => {
+    const { category, product } = req.params;
+    const {
+      productName,
+      productPrice,
+      productMrp,
+      productSize,
+      productDescription,
+    } = req.body;
 
-  // Find the category in the data
-  const foundCategory = categories.find((c) => c.category === category);
+    try {
+      // Find the category by name
+      const existingCategory = await Category.findOne({ category });
 
-  if (foundCategory) {
-    // Find the product in the category
-    const foundProduct = foundCategory.products.find(
-      (p) => p.productName === product
-    );
+      if (!existingCategory) {
+        return res.status(404).json({ error: "Category not found" });
+      }
 
-    if (foundProduct) {
-      // Update the product information
-      foundProduct.productName = updatedProduct.productName;
-      foundProduct.productPrice = updatedProduct.productPrice;
-      foundProduct.productMrp = updatedProduct.productMrp;
-      foundProduct.productSize = updatedProduct.productSize;
-      foundProduct.productDescription = updatedProduct.productDescription;
+      // Find the product within the category
+      const existingProduct = existingCategory.products.find(
+        (p) => p.productName === product
+      );
+
+      if (!existingProduct) {
+        return res
+          .status(404)
+          .json({ error: "Product not found in the category" });
+      }
+
+      // Update product details
+      if (productName) {
+        existingProduct.productName = productName;
+      }
+      if (productPrice) {
+        existingProduct.productPrice = productPrice;
+      }
+      if (productMrp) {
+        existingProduct.productMrp = productMrp;
+      }
+      if (productSize) {
+        existingProduct.productSize = productSize;
+      }
+      if (productDescription) {
+        existingProduct.productDescription = productDescription;
+      }
+
+      // Save the updated category document
+      await existingCategory.save();
 
       res.status(200).json({ message: "Product updated successfully" });
-    } else {
-      res.status(404).json({ message: "Product not found" });
+    } catch (error) {
+      console.error("Error updating product:", error);
+      res.status(500).json({ error: "Internal Server Error" });
     }
-  } else {
-    res.status(404).json({ message: "Category not found" });
   }
-});
+);
+
+// Route handlers for deleting product
+server.delete(
+  "/admin/dashboard/delete/:category/:product",
+  async (req, res) => {
+    const { category, product } = req.params;
+    try {
+      // Find the category by name
+      const categoryDoc = await Category.findOne({ category });
+
+      if (!categoryDoc) {
+        return res.status(404).json({ error: "Category not found" });
+      }
+
+      // Find the product to delete by name within the category
+      const productIndex = categoryDoc.products.findIndex(
+        (p) => p.productName === product
+      );
+
+      if (productIndex === -1) {
+        return res
+          .status(404)
+          .json({ error: "Product not found in the category" });
+      }
+
+      // Remove the product from the category's products array
+      categoryDoc.products.splice(productIndex, 1);
+
+      // Save the updated category document
+      await categoryDoc.save();
+
+      res.sendStatus(200);
+    } catch (error) {
+      console.error("Error deleting product:", error);
+      res.sendStatus(500);
+    }
+  }
+);
 
 // Route handler for fetching products
 server.get("/products", async (req, res) => {

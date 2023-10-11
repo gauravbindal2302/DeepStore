@@ -27,17 +27,12 @@
   border-radius: 10px;
 }
 .order-buttons {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); /* Two columns with equal width */
-  justify-items: center;
-  align-items: center;
+  margin: 0 10px 15px 15px;
+}
+.order-buttons button {
+  width: 100%;
 }
 
-.order-buttons button {
-  margin-right: 15px;
-  margin-bottom: 15px;
-  width: 100%; /* Make the buttons occupy 100% of their container's width */
-}
 .admin-button {
   margin: auto;
   padding: 8px 100px;

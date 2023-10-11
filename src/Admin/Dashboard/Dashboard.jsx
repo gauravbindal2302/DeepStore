@@ -38,16 +38,11 @@ export default function Dashboard({ title }) {
         </div>
       </div>
       <div className="orders-row">
-        <h1>Orders Received and Placed</h1>
+        <h1>Orders Received and Delivered</h1>
         <div className="order-buttons">
-          <Link to="/admin/dashboard/ordered-orders">
+          <Link to="/admin/dashboard/ordersReceived">
             <button type="submit" className="admin-button">
-              Orders Ordered
-            </button>
-          </Link>
-          <Link to="/admin/dashboard/placed-orders">
-            <button type="submit" className="admin-button">
-              Orders Placed
+              Manage Orders
             </button>
           </Link>
         </div>

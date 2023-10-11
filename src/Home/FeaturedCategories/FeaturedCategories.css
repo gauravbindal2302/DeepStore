@@ -23,7 +23,7 @@ button,
 button {
   justify-self: flex-end;
   justify-items: end;
-  padding: 6px;
+  padding: 6px 20px;
   color: #173334;
   background-color: #febd2f;
   border-radius: 8px;

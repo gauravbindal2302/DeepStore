@@ -14,6 +14,7 @@
   font-size: 1.2rem;
   background: #9b9a9a;
   color: #343333;
+  cursor: pointer;
 }
 .list ul {
   padding: 5px px;
@@ -39,7 +40,6 @@
   background-color: #c1c0bd;
   transition: none;
 }
-
 .small-container {
   margin: auto;
   padding-left: 25px;

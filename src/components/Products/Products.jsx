@@ -13,7 +13,6 @@ export default function Products({ title }) {
 
   useEffect(() => {
     fetchCategories();
-    fetchProducts();
   }, []);
 
   useEffect(() => {
@@ -24,21 +23,21 @@ export default function Products({ title }) {
     try {
       const response = await axios.get("http://localhost:5000/categories");
       setCategories(response.data);
-    } catch (error) {
-      console.error("Error fetching categories:", error);
-    }
-  };
-
-  const fetchProducts = async () => {
-    try {
-      const response = await axios.get("http://localhost:5000/products");
-      const productsWithImageUrl = response.data.map((product) => ({
-        ...product,
-        image: "http://localhost:5000/uploads/" + product.productImage,
-      }));
+      // Fetch all products with their categories
+      const productsWithImageUrl = response.data.reduce(
+        (accumulator, category) => [
+          ...accumulator,
+          ...category.products.map((product) => ({
+            ...product,
+            category: category.category, // Add category to the product object
+            image: "http://localhost:5000/uploads/" + product.productImage,
+          })),
+        ],
+        []
+      );
       setProducts(productsWithImageUrl);
     } catch (error) {
-      console.error("Error fetching products:", error);
+      console.error("Error fetching categories:", error);
     }
   };
 
@@ -50,7 +49,7 @@ export default function Products({ title }) {
     ? products.filter((product) => product.category === selectedCategory)
     : products;
 
-  const sortedProducts = [...filteredProducts]; // Create a copy to avoid mutating the original array
+  const sortedProducts = [...filteredProducts];
 
   if (selectedSortingOption === "lowToHigh") {
     sortedProducts.sort((a, b) => a.productPrice - b.productPrice);
@@ -63,7 +62,7 @@ export default function Products({ title }) {
       <Navbar />
       <div className="products">
         <div className="list">
-          <h1>All Categories</h1>
+          <h1 onClick={() => handleCategorySelect("")}>All Categories</h1>
           <ul>
             {categories.map((category) => (
               <li key={category.category}>
@@ -81,7 +80,12 @@ export default function Products({ title }) {
         </div>
         <div className="small-container">
           <div className="row row-2">
-            <h2>All Products</h2>
+            <h2
+              onClick={() => handleCategorySelect("")}
+              style={{ cursor: "pointer" }}
+            >
+              All Products
+            </h2>
             <h2>
               <select
                 name=""

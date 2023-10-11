@@ -5,33 +5,62 @@ import "./Delete.css";
 
 export default function Delete({ title }) {
   const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCategory1, setSelectedCategory1] = useState("");
+  const [selectedCategory2, setSelectedCategory2] = useState("");
+  const [selectedProduct, setSelectedProduct] = useState("");
+  const [categoryProducts, setCategoryProducts] = useState([]);
 
   useEffect(() => {
     document.title = title;
     getCategoryNames();
   }, [title]);
 
-  const handleCategorySelect = (event) => {
-    setSelectedCategory(event.target.value);
-  };
+  useEffect(() => {
+    if (selectedCategory2) {
+      const category = categories.find(
+        (category) => category.category === selectedCategory2
+      );
+      setCategoryProducts(category ? category.products : []);
+    } else {
+      setCategoryProducts([]);
+    }
+  }, [selectedCategory2, categories]);
 
-  const handleDelete = async (event) => {
+  const handleDeleteCategory = async (event) => {
     event.preventDefault();
-    if (!selectedCategory) {
+    if (!selectedCategory1) {
       alert("Please select a category to delete");
       return;
     }
 
     try {
       await axios.delete(
-        `http://localhost:5000/admin/dashboard/delete/${selectedCategory}`
+        `http://localhost:5000/admin/dashboard/delete/${selectedCategory1}`
       );
-      alert("Category deleted successfully");
-      setSelectedCategory("");
+      alert(`Category (${selectedCategory1}) deleted successfully!`);
+      setSelectedCategory1("");
       getCategoryNames();
     } catch (error) {
       console.error("Error deleting category:", error);
+    }
+  };
+
+  const handleDeleteProduct = async (event) => {
+    event.preventDefault();
+    if (!selectedCategory2 || !selectedProduct) {
+      alert("Please select both category and product to delete.");
+      return;
+    }
+
+    try {
+      await axios.delete(
+        `http://localhost:5000/admin/dashboard/delete/${selectedCategory2}/${selectedProduct}`
+      );
+      alert(`Product (${selectedProduct}) deleted successfully!`);
+      setSelectedProduct("");
+      // You can add logic here to refresh the product list if needed
+    } catch (error) {
+      console.error("Error deleting product:", error);
     }
   };
 
@@ -52,24 +81,28 @@ export default function Delete({ title }) {
         <div className="dashboard-col-1">
           <h1>Delete Category</h1>
           <table className="view-table">
-            <tr>
-              <th>S.No.</th>
-              <th>Categories</th>
-            </tr>
-            {categories.map((category, index) => (
-              <tr key={category._id}>
-                <td>{index + 1}</td>
-                <td>{category.category}</td>
+            <thead>
+              <tr>
+                <th>S.No.</th>
+                <th>Categories</th>
               </tr>
-            ))}
+            </thead>
+            <tbody>
+              {categories.map((category, index) => (
+                <tr key={category._id}>
+                  <td>{index + 1}</td>
+                  <td>{category.category}</td>
+                </tr>
+              ))}
+            </tbody>
           </table>
-          <form onSubmit={handleDelete}>
+          <form onSubmit={handleDeleteCategory}>
             <select
               name=""
-              value={selectedCategory}
-              onChange={handleCategorySelect}
+              value={selectedCategory1}
+              onChange={(event) => setSelectedCategory1(event.target.value)}
             >
-              <option>Select Category</option>
+              <option value="">Select Category</option>
               {categories.map((category) => (
                 <option key={category._id} value={category.category}>
                   {category.category}
@@ -83,21 +116,35 @@ export default function Delete({ title }) {
         </div>
         <div className="dashboard-col-2">
           <h1>Delete Product</h1>
-          <select name="" id="view-select-1">
-            <option>Select Category</option>
-            {categories.map((category) => (
-              <option key={category._id}>{category.category}</option>
-            ))}
-          </select>
-          <select name="" id="view-select-2" style={{ margin: "0 0 5px 0" }}>
-            <option>Select Product</option>
-            {categories.map((category) => (
-              <option key={category._id}>{category.category}</option>
-            ))}
-          </select>
-          <button type="submit" className="admin-btn">
-            Delete Product
-          </button>
+          <form onSubmit={handleDeleteProduct}>
+            <select
+              value={selectedCategory2}
+              onChange={(event) => setSelectedCategory2(event.target.value)}
+            >
+              <option value="">Select Category</option>
+              {categories.map((category) => (
+                <option key={category._id} value={category.category}>
+                  {category.category} (Total: {category.products.length}{" "}
+                  {category.products.length === 1 ? "product" : "products"})
+                </option>
+              ))}
+            </select>
+            <select
+              value={selectedProduct}
+              onChange={(event) => setSelectedProduct(event.target.value)}
+              style={{ margin: "5px 0" }}
+            >
+              <option value="">Select Product</option>
+              {categoryProducts.map((product) => (
+                <option key={product._id} value={product.productName}>
+                  {product.productName}
+                </option>
+              ))}
+            </select>
+            <button type="submit" className="admin-btn">
+              Delete Product
+            </button>
+          </form>
         </div>
       </div>
     </>

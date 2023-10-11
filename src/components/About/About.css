@@ -21,9 +21,12 @@
   margin: 20px auto;
   font-size: 0.9rem;
 }
-.about-r2 {
+.about-r2,
+.about-r3 {
   height: 27.5vh;
   width: 100vw;
+  display: flex;
+  align-items: center;
 }
 .about-r2-c1 {
   width: 40vw;
@@ -45,10 +48,7 @@
 .about-r3-c1 p {
   font-size: 0.9rem;
 }
-.about-r3 {
-  height: 27.5vh;
-  width: 100vw;
-}
+
 .about-r3-c2 {
   width: 40vw;
   display: inline-block;
