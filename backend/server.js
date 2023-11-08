@@ -21,7 +21,7 @@ server.use(cors());
 server.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 const DB = process.env.DATABASE;
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5000;
 const SECRET_KEY = process.env.KEY;
 
 // Connect to the MongoDB database
