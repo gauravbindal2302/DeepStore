@@ -49,7 +49,7 @@ export default function Navbar() {
           <div className="navbar">
             <div className="logo">
               <Link to="/">
-                <span>Deep Store</span>
+                <span>DeepMart</span>
               </Link>
             </div>
             <div className="search-bar">
